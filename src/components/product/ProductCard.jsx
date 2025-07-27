@@ -61,12 +61,9 @@ const ProductCard = memo(({ product, onFavoriteToggle }) => {
   const originalPrice = product.discount > 0 
     ? product.price / (1 - product.discount / 100)
     : product.price;
-
   const discountAmount = originalPrice - product.price;
 
-  if (!product) {
-    return null;
-  }
+  if (!product) return null;
 
   return (
     <Card

@@ -16,17 +16,17 @@ import {
 } from '@mui/icons-material';
 import { updateQuantity, removeFromCart } from '../../store/slices/cartSlice';
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
   const dispatch = useDispatch();
 
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity >= 1) {
-      dispatch(updateQuantity({ id: item.id, quantity: newQuantity }));
+      onUpdateQuantity ? onUpdateQuantity(item.id, newQuantity) : dispatch(updateQuantity({ id: item.id, quantity: newQuantity }));
     }
   };
 
   const handleRemove = () => {
-    dispatch(removeFromCart(item.id));
+    onRemove ? onRemove(item.id) : dispatch(removeFromCart(item.id));
   };
 
   return (

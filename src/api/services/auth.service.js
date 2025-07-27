@@ -1,109 +1,157 @@
 import { api, TokenManager } from '../config';
+import { handleApiError, handleApiSuccess } from '../../utils/apiHelpers';
+import { validateEmail, validatePassword } from '../../utils/validation';
 
 const AuthService = {
-    // Đăng ký người dùng
+    // Register with validation
     register: async (userData) => {
         try {
+            // Basic validation
+            if (!validateEmail(userData.email)) {
+                return handleApiError(new Error('Invalid email format'));
+            }
+            
+            if (!validatePassword(userData.password)) {
+                return handleApiError(new Error('Password must be at least 8 characters with uppercase, lowercase and number'));
+            }
+            
             const response = await api.post('/auth/register', userData);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Registration failed' };
+            return handleApiError(error, 'Registration failed');
         }
     },
 
-    // Đăng nhập thường
+    // Login with validation
     login: async (credentials) => {
         try {
+            if (!credentials.email || !credentials.password) {
+                return handleApiError(new Error('Email and password are required'));
+            }
+            
             const response = await api.post('/auth/login', credentials);
+            
             if (response.data.token) {
                 TokenManager.set(response.data.token);
             }
-            return { success: true, data: response.data };
+            
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Login failed' };
+            return handleApiError(error, 'Login failed');
         }
     },
 
-    // Đăng nhập Google
+    // Google login
     googleLogin: async (token) => {
         try {
+            if (!token) {
+                return handleApiError(new Error('Google token is required'));
+            }
+            
             const response = await api.post('/auth/google', { token });
+            
             if (response.data.token) {
                 TokenManager.set(response.data.token);
             }
-            return { success: true, data: response.data };
+            
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Google login failed' };
+            return handleApiError(error, 'Google login failed');
         }
     },
 
-    // Đăng xuất
+    // Logout
     logout: async () => {
         try {
             await api.post('/auth/logout');
-            TokenManager.remove();
-            return { success: true };
         } catch (error) {
-            // Vẫn xóa token local ngay cả khi server lỗi
+            // Log error but still remove local token
+            console.warn('Logout API call failed:', error.message);
+        } finally {
+            // Always remove local token
             TokenManager.remove();
-            return { success: true };
         }
+        
+        return handleApiSuccess({ message: 'Logged out successfully' });
     },
 
-    // Lấy thông tin user hiện tại
+    // Other methods remain the same but use helpers
     getCurrentUser: async () => {
         try {
             const response = await api.get('/auth/me');
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to get user info' };
+            return handleApiError(error, 'Failed to get user info');
         }
     },
 
-    // Cập nhật profile
     updateProfile: async (userData) => {
         try {
             const response = await api.put('/auth/profile', userData);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Profile update failed' };
+            return handleApiError(error, 'Profile update failed');
         }
     },
 
-    // Đổi mật khẩu
     changePassword: async (passwordData) => {
         try {
+            const { currentPassword, newPassword } = passwordData;
+            
+            if (!currentPassword || !newPassword) {
+                return handleApiError(new Error('Current and new passwords are required'));
+            }
+            
+            if (!validatePassword(newPassword)) {
+                return handleApiError(new Error('New password must be at least 8 characters with uppercase, lowercase and number'));
+            }
+            
             const response = await api.put('/auth/change-password', passwordData);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Password change failed' };
+            return handleApiError(error, 'Password change failed');
         }
     },
 
-    // Quên mật khẩu
     forgotPassword: async (email) => {
         try {
+            if (!validateEmail(email)) {
+                return handleApiError(new Error('Invalid email format'));
+            }
+            
             const response = await api.post('/auth/forgot-password', { email });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to send reset email' };
+            return handleApiError(error, 'Failed to send reset email');
         }
     },
 
-    // Reset mật khẩu
     resetPassword: async (token, newPassword) => {
         try {
+            if (!token || !newPassword) {
+                return handleApiError(new Error('Token and new password are required'));
+            }
+            
+            if (!validatePassword(newPassword)) {
+                return handleApiError(new Error('Password must be at least 8 characters with uppercase, lowercase and number'));
+            }
+            
             const response = await api.post('/auth/reset-password', { token, newPassword });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Password reset failed' };
+            return handleApiError(error, 'Password reset failed');
         }
     },
 
-    // Kiểm tra trạng thái đăng nhập
+    // Utility methods
     isAuthenticated: () => {
         const token = TokenManager.get();
         return token && TokenManager.isValid(token);
+    },
+
+    getCurrentUserFromToken: () => {
+        const token = TokenManager.get();
+        return TokenManager.getTokenPayload(token);
     }
 };
 

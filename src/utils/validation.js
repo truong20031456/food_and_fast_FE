@@ -25,4 +25,16 @@ export const registerSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
-}); 
+});
+
+// Email validation
+export const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// Password validation: at least 8 characters, uppercase, lowercase, number
+export const validatePassword = (password) => {
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+}; 

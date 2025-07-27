@@ -1,0 +1,178 @@
+import { createContext, useState } from 'react';
+
+export const LocalizationContext = createContext();
+
+const translations = {
+  en: {
+    // Navigation
+    home: "Home",
+    products: "Products",
+    delivery: "Delivery",
+    support: "Support",
+    profile: "Profile",
+    orders: "Orders",
+    favorites: "Favorites",
+    settings: "Settings",
+    logout: "Logout",
+    login: "Login",
+    register: "Register",
+    search: "Search",
+    cart: "Cart",
+    notifications: "Notifications",
+    account_settings: "Account Settings",
+    change_language: "Change Language",
+    food_and_fast: "Food & Fast",
+    new: "NEW",
+    
+    // Home page
+    home_hero_promo: "🍴 Today's Special Promotion",
+    home_hero_title: "Taste of Vietnam",
+    home_hero_delivery: "Delivery to your door",
+    home_hero_subtitle: "Enjoy authentic Vietnamese dishes made from the freshest ingredients.",
+    home_hero_menu: "View Menu",
+    home_hero_video: "Watch Video",
+    home_features_title: "Why Choose Us?",
+    home_features_subtitle: "We are committed to delivering the best culinary experience.",
+    home_feature_1_title: "Fresh Ingredients",
+    home_feature_1_desc: "We only use the freshest ingredients, carefully selected from trusted suppliers.",
+    home_feature_2_title: "Fast Delivery",
+    home_feature_2_desc: "Delivery within 30 minutes in the city, ensuring your food is hot.",
+    home_feature_3_title: "24/7 Support",
+    home_feature_3_desc: "Our customer support team is always ready to assist you anytime, anywhere.",
+    home_dishes_title: "Popular Dishes",
+    home_dishes_subtitle: "The hottest dishes most ordered by customers.",
+    home_dish_1_name: "Special Beef Pho",
+    home_dish_1_category: "Main Dish",
+    home_dish_1_price: "85,000₫",
+    home_dish_2_name: "Grilled Pork Banh Mi",
+    home_dish_2_category: "Snack",
+    home_dish_2_price: "25,000₫",
+    home_dish_3_name: "Broken Rice with Grilled Pork Chop",
+    home_dish_3_category: "Main Dish",
+    home_dish_3_price: "65,000₫",
+    home_dish_4_name: "Three Color Dessert",
+    home_dish_4_category: "Dessert",
+    home_dish_4_price: "15,000₫",
+    home_dishes_all: "View All Dishes",
+    home_about_title: "Our Story",
+    home_about_1: "Started from a small eatery with a passion for Vietnamese cuisine, we have continuously developed to bring high-quality dishes with rich, traditional flavors.",
+    home_about_2: "Our mission is to preserve and promote Vietnamese culinary values, while providing convenience for customers in the digital age.",
+    home_about_more: "Learn More",
+    home_testimonials_title: "What Our Customers Say",
+    home_testimonials_subtitle: "Thousands of satisfied customers have trusted us.",
+    home_testimonial_1_text: "Amazing food! Fast delivery and still hot. I order here every week.",
+    home_testimonial_1_author: "Lan Nguyen",
+    home_testimonial_1_role: "Loyal Customer",
+    home_testimonial_2_text: "Great food quality, reasonable price. Excellent customer service!",
+    home_testimonial_2_author: "Minh Tran",
+    home_testimonial_2_role: "VIP Customer",
+    home_contact_title: "Contact Us",
+    home_contact_subtitle: "Contact us now for advice and to order your favorite dishes.",
+    home_contact_info: "Contact Information",
+    home_contact_email: "📧 info@monngonvietnam.com",
+    home_contact_phone: "📞 0123 456 789",
+    home_contact_address: "📍 123 Nguyen Hue St, District 1, HCMC",
+    home_contact_hours: "Opening Hours",
+    home_contact_mon_fri: "Mon - Fri: 8:00 AM - 10:00 PM",
+    home_contact_sat: "Sat: 8:00 AM - 11:00 PM",
+    home_contact_sun: "Sun: 9:00 AM - 10:00 PM",
+    home_contact_order_now: "Order Now",
+    home_contact_signup: "Sign up for promotions and new dishes",
+    home_contact_signup_btn: "Sign Up Now"
+  },
+  vn: {
+    // Navigation
+    home: "Trang chủ",
+    products: "Sản phẩm",
+    delivery: "Giao hàng",
+    support: "Hỗ trợ",
+    profile: "Hồ sơ",
+    orders: "Đơn hàng",
+    favorites: "Yêu thích",
+    settings: "Cài đặt",
+    logout: "Đăng xuất",
+    login: "Đăng nhập",
+    register: "Đăng ký",
+    search: "Tìm kiếm",
+    cart: "Giỏ hàng",
+    notifications: "Thông báo",
+    account_settings: "Cài đặt tài khoản",
+    change_language: "Đổi ngôn ngữ",
+    food_and_fast: "Food & Fast",
+    new: "MỚI",
+    
+    // Home page
+    home_hero_promo: "🍴 Khuyến mãi đặc biệt hôm nay",
+    home_hero_title: "Hương vị Việt Nam",
+    home_hero_delivery: "Giao tận nơi",
+    home_hero_subtitle: "Thưởng thức những món ăn Việt Nam đậm đà, được chế biến từ nguyên liệu tươi ngon nhất",
+    home_hero_menu: "Xem thực đơn",
+    home_hero_video: "Xem video",
+    home_features_title: "Tại sao chọn chúng tôi?",
+    home_features_subtitle: "Cam kết mang đến trải nghiệm ẩm thực tuyệt vời nhất cho khách hàng",
+    home_feature_1_title: "Nguyên liệu tươi ngon",
+    home_feature_1_desc: "Chúng tôi chỉ sử dụng nguyên liệu tươi ngon nhất, được chọn lọc từ các nguồn cung cấp uy tín",
+    home_feature_2_title: "Giao hàng nhanh chóng",
+    home_feature_2_desc: "Giao hàng trong vòng 30 phút trong khu vực nội thành, đảm bảo thức ăn vẫn nóng hổi",
+    home_feature_3_title: "Hỗ trợ 24/7",
+    home_feature_3_desc: "Đội ngũ chăm sóc khách hàng luôn sẵn sàng hỗ trợ bạn mọi lúc mọi nơi",
+    home_dishes_title: "Món ăn được yêu thích",
+    home_dishes_subtitle: "Những món ăn hot nhất được khách hàng đặt nhiều nhất",
+    home_dish_1_name: "Phở Bò Đặc Biệt",
+    home_dish_1_category: "Món chính",
+    home_dish_1_price: "85.000đ",
+    home_dish_2_name: "Bánh Mì Thịt Nướng",
+    home_dish_2_category: "Ăn vặt",
+    home_dish_2_price: "25.000đ",
+    home_dish_3_name: "Cơm Tấm Sườn Nướng",
+    home_dish_3_category: "Món chính",
+    home_dish_3_price: "65.000đ",
+    home_dish_4_name: "Chè Ba Màu",
+    home_dish_4_category: "Tráng miệng",
+    home_dish_4_price: "15.000đ",
+    home_dishes_all: "Xem tất cả món ăn",
+    home_about_title: "Câu chuyện của chúng tôi",
+    home_about_1: "Bắt đầu từ một quán ăn nhỏ với niềm đam mê ẩm thực Việt Nam, chúng tôi đã không ngừng phát triển để mang đến những món ăn chất lượng cao với hương vị đậm đà, truyền thống.",
+    home_about_2: "Sứ mệnh của chúng tôi là bảo tồn và phát huy những giá trị ẩm thực Việt Nam, đồng thời mang đến sự tiện lợi cho khách hàng trong thời đại số.",
+    home_about_more: "Tìm hiểu thêm",
+    home_testimonials_title: "Khách hàng nói gì về chúng tôi",
+    home_testimonials_subtitle: "Hàng nghìn khách hàng hài lòng đã tin tưởng lựa chọn",
+    home_testimonial_1_text: "Đồ ăn ngon tuyệt vời! Giao hàng nhanh và còn nóng. Tôi đặt ăn ở đây mỗi tuần.",
+    home_testimonial_1_author: "Nguyễn Thị Lan",
+    home_testimonial_1_role: "Khách hàng thân thiết",
+    home_testimonial_2_text: "Chất lượng món ăn rất tốt, giá cả hợp lý. Dịch vụ khách hàng xuất sắc!",
+    home_testimonial_2_author: "Trần Văn Minh",
+    home_testimonial_2_role: "Khách hàng VIP",
+    home_contact_title: "Liên hệ với chúng tôi",
+    home_contact_subtitle: "Hãy liên hệ ngay để được tư vấn và đặt món yêu thích của bạn",
+    home_contact_info: "Thông tin liên hệ",
+    home_contact_email: "📧 info@monngonvietnam.com",
+    home_contact_phone: "📞 0123 456 789",
+    home_contact_address: "📍 123 Đường Nguyễn Huệ, Quận 1, TP.HCM",
+    home_contact_hours: "Thời gian phục vụ",
+    home_contact_mon_fri: "Thứ 2 - Thứ 6: 8:00 AM - 10:00 PM",
+    home_contact_sat: "Thứ 7: 8:00 AM - 11:00 PM",
+    home_contact_sun: "Chủ nhật: 9:00 AM - 10:00 PM",
+    home_contact_order_now: "Đặt món ngay",
+    home_contact_signup: "Đăng ký nhận thông tin khuyến mãi và món mới",
+    home_contact_signup_btn: "Đăng ký ngay"
+  },
+};
+
+export const LocalizationProvider = ({ children }) => {
+  const [language, setLanguage] = useState('vn');
+
+  const setLang = (lang) => {
+    setLanguage(lang);
+  };
+
+  const t = (key) => {
+    return translations[language][key] || key;
+  };
+
+  return (
+    <LocalizationContext.Provider value={{ language, setLang, t }}>
+      {children}
+    </LocalizationContext.Provider>
+  );
+};

@@ -1,13 +1,14 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
-import Layout from './components/layout/Layout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import Blog from './pages/Blog';
-import Careers from './pages/Careers';
-import Products from './pages/Products';
+import Layout from './layouts/Layout';
+import Home from './views/Home';
+import Login from './views/Login';
+import Register from './views/Register';
+import Profile from './views/Profile';
+import Blog from './views/Blog';
+import Careers from './views/Careers';
+import Products from './views/Products';
+import NotFound from './views/NotFound';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -19,27 +20,26 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
-const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/product" element={<Products />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route
-          path="profile"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-      </Route>
-    </Routes>
-  );
-};
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<Home />} />
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
+      <Route path="products" element={<Products />} />
+      <Route path="blog" element={<Blog />} />
+      <Route path="careers" element={<Careers />} />
+      <Route
+        path="profile"
+        element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        }
+      />
+   
+    </Route>
+  </Routes>
+);
 
 export default AppRoutes; 

@@ -1,16 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Initial state for cart management
 const initialState = {
-  items: [],
-  total: 0,
-  loading: false,
-  error: null,
+  items: [],      // List of products in cart
+  loading: false, // Loading state for cart actions
+  error: null,    // Error message
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+    /**
+     * Add product to cart. If already exists, increase quantity.
+     */
     addToCart: (state, action) => {
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
@@ -18,30 +21,41 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
       }
-      state.total = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
+    /**
+     * Remove product from cart by id
+     */
     removeFromCart: (state, action) => {
       state.items = state.items.filter(item => item.id !== action.payload);
-      state.total = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
+    /**
+     * Update product quantity in cart
+     */
     updateQuantity: (state, action) => {
       const { id, quantity } = action.payload;
       const item = state.items.find(item => item.id === id);
       if (item) {
         item.quantity = quantity;
-        state.total = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
       }
     },
+    /**
+     * Clear all items in cart
+     */
     clearCart: (state) => {
       state.items = [];
-      state.total = 0;
     },
+    /**
+     * Set loading state for cart actions
+     */
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    /**
+     * Set error message for cart actions
+     */
     setError: (state, action) => {
       state.error = action.payload;
-    },
+    }
   },
 });
 

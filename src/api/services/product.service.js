@@ -1,96 +1,115 @@
 import { api } from '../config';
+import { handleApiSuccess, handleApiError } from '../../utils/apiHelpers';
 
 const ProductService = {
-    // Lấy tất cả sản phẩm với pagination và filters
+    /**
+     * Get all products with pagination and filters
+     */
     getAllProducts: async (params = {}) => {
         try {
             const response = await api.get('/products', { params });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch products' };
+            return handleApiError(error, 'Failed to fetch products');
         }
     },
 
-    // Lấy sản phẩm theo ID
+    /**
+     * Get product by ID
+     */
     getProductById: async (id) => {
         try {
             const response = await api.get(`/products/${id}`);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Product not found' };
+            return handleApiError(error, 'Product not found');
         }
     },
 
-    // Lấy sản phẩm theo danh mục (thống nhất endpoint)
+    /**
+     * Get products by category
+     */
     getProductsByCategory: async (categoryId) => {
         try {
             const response = await api.get('/products', { 
                 params: { category_id: categoryId } 
             });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch category products' };
+            return handleApiError(error, 'Failed to fetch category products');
         }
     },
 
-    // Tìm kiếm sản phẩm (thống nhất endpoint)
+    /**
+     * Search products
+     */
     searchProducts: async (query, filters = {}) => {
         try {
             const params = { search: query, ...filters };
             const response = await api.get('/products', { params });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Search failed' };
+            return handleApiError(error, 'Search failed');
         }
     },
 
-    // Lấy danh mục sản phẩm
+    /**
+     * Get product categories
+     */
     getCategories: async () => {
         try {
             const response = await api.get('/categories');
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch categories' };
+            return handleApiError(error, 'Failed to fetch categories');
         }
     },
 
-    // Lấy đánh giá sản phẩm
+    /**
+     * Get product reviews
+     */
     getProductReviews: async (productId, params = {}) => {
         try {
             const response = await api.get(`/products/${productId}/reviews`, { params });
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch reviews' };
+            return handleApiError(error, 'Failed to fetch reviews');
         }
     },
 
-    // Thêm đánh giá sản phẩm
+    /**
+     * Add product review
+     */
     addProductReview: async (productId, reviewData) => {
         try {
             const response = await api.post(`/products/${productId}/reviews`, reviewData);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to add review' };
+            return handleApiError(error, 'Failed to add review');
         }
     },
 
-    // Lấy sản phẩm liên quan
+    /**
+     * Get related products
+     */
     getRelatedProducts: async (productId) => {
         try {
             const response = await api.get(`/products/${productId}/related`);
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch related products' };
+            return handleApiError(error, 'Failed to fetch related products');
         }
     },
 
-    // Lấy sản phẩm nổi bật
+    /**
+     * Get featured products
+     */
     getFeaturedProducts: async () => {
         try {
             const response = await api.get('/products/featured');
-            return { success: true, data: response.data };
+            return handleApiSuccess(response.data);
         } catch (error) {
-            return { success: false, error: error.response?.data?.message || 'Failed to fetch featured products' };
+            return handleApiError(error, 'Failed to fetch featured products');
         }
     }
 };
